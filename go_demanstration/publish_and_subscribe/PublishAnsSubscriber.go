@@ -1,11 +1,10 @@
-
 package main
 
 import (
-"fmt"
-"strings"
-"sync"
-"time"
+	"fmt"
+	"strings"
+	"sync"
+	"time"
 )
 
 type (
@@ -30,7 +29,7 @@ func NewPublisher(timeOut time.Duration, bufferCount int) *Publisher {
 }
 
 func (pub *Publisher) Subscriber(fliter FliterFun) Subsriber {
-	sub := make(Subsriber)
+	sub := make(Subsriber,pub.bufferCount)
 	pub.lock.Lock()
 	pub.subscirbers[sub] = fliter
 	pub.lock.Unlock()
@@ -94,12 +93,14 @@ func main() {
 	normal := Publisher.SubscribeAllMessage()
 	go func() {
 		for {
-			fmt.Println(<-golangSubsci)
+			tmpStr := <-golangSubsci
+			fmt.Println(tmpStr)
 		}
 	}()
 	go func() {
 		for {
-			fmt.Println(<-normal)
+			tmp := <-normal
+			fmt.Println(tmp)
 		}
 	}()
 	Publisher.PublishMessage("hello world")
