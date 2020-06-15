@@ -78,7 +78,7 @@ func (pub *Publisher) publishToSubscribers(tmpFilter FliterFun, message interfac
 	}
 	select {
 	case subscriber <- message:
-	case <-time.After(pub.timeOut):
+	case <-time.After(pub.timeOut * time.Second):
 	}
 }
 
@@ -105,5 +105,7 @@ func main() {
 	}()
 	Publisher.PublishMessage("hello world")
 	Publisher.PublishMessage("golang world")
+	Publisher.PublishMessage("the world")
+	Publisher.PublishMessage("golang hello")
 	time.Sleep(5 * time.Second)
 }
